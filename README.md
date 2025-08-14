@@ -8,6 +8,26 @@
 
 ---
 
+## 📚 Table of Contents
+
+- [📌 Project Overview](#-project-overview)
+- [✨ Key Features](#-key-features)
+- [🧠 System Architecture Overview](#-system-architecture-overview)
+- [📂 Project Directory Structure](#-project-directory-structure)
+- [💻 Local Usage Instructions](#-local-usage-instructions)
+- [🛠️ Tech Stack](#️-tech-stack)
+- [🔄 DVC Pipeline Stages](#-dvc-pipeline-stages)
+- [📈 MLflow Tracking](#-mlflow-tracking)
+- [🧪 Evaluation Metrics](#-evaluation-metrics)
+- [🗃️ Dataset Source](#️-dataset-source)
+- [🧪 Research Notebooks](#-research-notebooks)
+- [📤 Future Enhancements](#-future-enhancements)
+- [🤝 Contributing](#-contributing)
+- [📜 License](#-license)
+- [📩 Contact](#-contact)
+
+---
+
 ## 📌 Project Overview
 
 **Credit Score Modelling** is a complete, modularized pipeline that automates the process of building, validating, and deploying credit risk models. It follows best practices of MLOps using tools like **DVC**, **MLflow**, **FastAPI**, and **Streamlit**, and applies **optimal binning** and **logistic regression** to build scorecards aligned with traditional credit risk modeling methodologies.
@@ -37,15 +57,15 @@ To develop a **credit risk scorecard** using statistical modeling principles tha
 
 ```mermaid
 flowchart TD
-    A[Raw Data (Kaggle)] --> B[Data Ingestion]
-    B --> C[Data Validation]
-    C --> D[Binning + Transformation]
-    D --> E[Data Versioning (DVC) / Splitting (train/test/oot)]
-    E --> F[ML Model Training (Scorecard)]
-    F --> G[Model Evaluation]
-    G --> H[MLflow Logging]
-    H --> I[Prediction API (FastAPI)]
-    I --> J[User Interface (Streamlit)]
+    A["Raw Data - Kaggle"] --> B["Data Ingestion"]
+    B --> C["Data Validation"]
+    C --> D["Binning & Transformation"]
+    D --> E["Data Versioning - DVC / Splitting - train/test/oot"]
+    E --> F["ML Model Training - Scorecard"]
+    F --> G["Model Evaluation"]
+    G --> H["MLflow Logging"]
+    H --> I["Prediction API - FastAPI"]
+    I --> J["User Interface - Streamlit"]
 ```
 
 ---
@@ -175,9 +195,26 @@ stages:
 
 ## 📈 MLflow Tracking
 Supports both:
+
 - ✅ Local MLflow tracking (mlruns folder), cmd: `mlflow ui`
 - ✅ Remote tracking server (e.g., DagsHub: `mlflow.set_tracking_uri("https://dagshub.com/username/repo.mlflow")`)
+
 Set your preferred tracking URI in `config.yaml`.
+
+## 🧪 Evaluation Metrics
+All  metrices are logged in MLflow
+
+- ✅ AUC/GINI/KS: Your model ranks predictions very well — strong ability to distinguish defaults from non-defaults.
+
+- ✅ PR-AUC: Reflects good precision-recall tradeoff, especially important for imbalanced datasets like credit risk.
+
+- ✅ Brier Score: Low value confirms your predicted probabilities are well calibrated, especially when paired with your improved calibration curve. **Calibration Monitor →** recalibrate if Brier ≥ 0.20
+
+- ✅ PSI: To detect shifts in feature distributions, monitor Population Stability Index (PSI) between training and production data. A PSI < 0.1 indicates stable distributions, while > 0.2 suggests significant shifts.
+
+## 🗃️ Dataset Source
+This project uses the Credit Risk Dataset from [Kaggle](https://www.kaggle.com/datasets/laotse/credit-risk-dataset), featuring loan and applicant attributes for binary default classification.
+
 
 ## 🧪 Research Notebooks
 - `EDA.ipynb`: Exploratory Data Analysis
@@ -185,7 +222,7 @@ Set your preferred tracking URI in `config.yaml`.
 
 ## 📤 Future Enhancements
 
-- 🔮 AutoML integration (Optuna/Sklearn tuning)
+- 🔮 AutoML integration
 - 📊 Dashboarding with more charts and explanations
 
 ## 🤝 Contributing
