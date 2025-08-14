@@ -1,0 +1,11 @@
+# params.yaml
+
+model_trainer:
+  estimator_params:
+    max_iter: 2000
+    solver: "lbfgs"
+  scaling_method: "pdo_odds"
+  scaling_method_params:
+    pdo: 30
+    odds: 4
+    scorecard_points: 650

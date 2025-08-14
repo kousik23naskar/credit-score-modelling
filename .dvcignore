@@ -1,0 +1,22 @@
+# Add patterns of files dvc should ignore, which could improve
+# the performance. Learn more at
+# https://dvc.org/doc/user-guide/dvcignore
+
+# Ignore log files
+logs/
+*.log
+
+# Ignore cache directories (temp files)
+__pycache__/
+*.py[cod]
+*.pkl
+
+# Ignore notebooks output
+.ipynb_checkpoints/
+
+# Ignore local run configurations
+*.env
+*.venv/
+.venv/
+.envrc
+.env

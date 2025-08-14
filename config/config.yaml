@@ -1,0 +1,44 @@
+# config/config.yaml
+
+data_ingestion:
+  kaggle_dataset: "laotse/credit-risk-dataset"  # Kaggle dataset slug
+  raw_data_dir: "artifacts/data_ingestion/raw"
+  downloaded_data_dir: "artifacts/data_ingestion/downloaded"
+  raw_data_file_name: "credit_risk_dataset.csv"
+
+data_validation:
+  schema_file_path: "config/schema.yaml"
+  validation_artifact_dir: "artifacts/data_validation"
+  validation_report_file: "validation.txt"
+
+data_transformation:
+  transformed_data_dir: "artifacts/data_transformation"
+  transformed_data_file_name: "transformed_data.csv" # Transformed data after outlier handeling
+  binning_object_file: "binning_process.pkl"
+  target_column: "loan_status"
+  test_size: 0.3
+  oot_size: 0.2
+  random_state: 42
+  X_train_file: "X_train.pkl"
+  X_test_file: "X_test.pkl"
+  X_oot_file: "X_oot.pkl"
+  y_train_file: "y_train.pkl"
+  y_test_file: "y_test.pkl"
+  y_oot_file: "y_oot.pkl"
+
+model_trainer:
+  trained_model_dir: "artifacts/model_trainer"
+  model_file_name: "scorecard_model.pkl"  
+  #MLflow tracking settings
+  # ✅ Local tracking (stored under ./mlruns/)
+  mlflow_tracking_uri: "mlruns"  #"file:///absolute/path/to/your_project/mlruns"
+  # mlflow_tracking_uri: "https://dagshub.com/kousik23naskar/credit-score-modelling.mlflow"  # 👈 For DagsHub tracking (remote)
+  experiment_name: "CreditScore_Training"
+  run_name: "Scorecard_Training"
+
+model_evaluation:
+  evaluation_artifact_dir: "artifacts/model_evaluation"
+  metrics_file_name: "metrics.json"
+
+model_pusher:
+  export_dir: "saved_models"

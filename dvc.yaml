@@ -1,0 +1,87 @@
+stages:
+
+  data_ingestion:
+    cmd: PYTHONPATH=. python src/pipeline/data_ingestion_pipeline.py
+    deps:
+      - src/pipeline/data_ingestion_pipeline.py
+      - src/components/data_ingestion.py
+      - config/config.yaml
+    outs:
+      - artifacts/data_ingestion/downloaded/credit_risk_dataset.csv
+      - artifacts/data_ingestion/ingestion_artifact.json
+
+  data_validation:
+    cmd: PYTHONPATH=. python src/pipeline/data_validation_pipeline.py
+    deps:
+      - src/pipeline/data_validation_pipeline.py
+      - src/components/data_validation.py
+      - config/config.yaml
+      - config/schema.yaml
+      - artifacts/data_ingestion/downloaded/credit_risk_dataset.csv
+      - artifacts/data_ingestion/ingestion_artifact.json
+    outs:
+      - artifacts/data_validation/validation.txt
+      - artifacts/data_validation/validation_artifact.json
+
+  data_transformation:
+    cmd: PYTHONPATH=. python src/pipeline/data_transformation_pipeline.py
+    deps:
+      - src/pipeline/data_transformation_pipeline.py
+      - src/components/data_transformation.py
+      - config/config.yaml
+      - artifacts/data_ingestion/downloaded/credit_risk_dataset.csv
+      - artifacts/data_ingestion/ingestion_artifact.json
+    outs:
+      - artifacts/data_transformation/transformed_data.csv
+      - artifacts/data_transformation/X_train.pkl
+      - artifacts/data_transformation/X_test.pkl
+      - artifacts/data_transformation/X_oot.pkl
+      - artifacts/data_transformation/y_train.pkl
+      - artifacts/data_transformation/y_test.pkl
+      - artifacts/data_transformation/y_oot.pkl
+      - artifacts/data_transformation/binning_process.pkl
+      - artifacts/data_transformation/transformation_artifact.json
+
+  model_trainer:
+    cmd: PYTHONPATH=. python src/pipeline/model_trainer_pipeline.py
+    deps:
+      - src/pipeline/model_trainer_pipeline.py
+      - src/components/model_trainer.py
+      - config/config.yaml
+      - artifacts/data_transformation/X_train.pkl
+      - artifacts/data_transformation/y_train.pkl
+      - artifacts/data_transformation/X_oot.pkl
+      - artifacts/data_transformation/y_oot.pkl
+      - artifacts/data_transformation/transformation_artifact.json
+    params:
+      - model_trainer.estimator_params
+      - model_trainer.scaling_method
+      - model_trainer.scaling_method_params
+    outs:
+      - artifacts/model_trainer/scorecard_model.pkl
+      - artifacts/model_trainer/model_artifact.json
+
+  model_evaluation:
+    cmd: PYTHONPATH=. python src/pipeline/model_evaluation_pipeline.py
+    deps:
+      - src/pipeline/model_evaluation_pipeline.py
+      - src/components/model_evaluation.py
+      - config/config.yaml
+      - artifacts/data_transformation/X_oot.pkl
+      - artifacts/data_transformation/y_oot.pkl
+      - artifacts/model_trainer/scorecard_model.pkl
+      - artifacts/data_transformation/transformation_artifact.json
+      - artifacts/model_trainer/model_artifact.json
+    metrics:
+      - artifacts/model_evaluation/metrics.json
+
+  model_pusher:
+    cmd: PYTHONPATH=. python src/pipeline/model_pusher_pipeline.py
+    deps:
+      - src/pipeline/model_pusher_pipeline.py
+      - src/components/model_pusher.py
+      - config/config.yaml
+      - artifacts/model_trainer/model_artifact.json
+    outs:
+      - saved_models:
+          cache: false

@@ -205,3 +205,27 @@ cython_debug/
 marimo/_static/
 marimo/_lsp/
 __marimo__/
+
+# MLflow tracking
+mlruns/
+
+# DVC cache and files (except dvc.yaml and dvc.lock)
+.dvc/cache/
+*.dvc
+
+# Project artifacts
+artifacts/
+saved_models/
+
+# Log files
+logs/
+*.log
+
+# Streamlit
+.streamlit/
+app_old.py
+
+run_pipeline.py
+
+reports/
+notebooks/
